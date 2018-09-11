@@ -11,7 +11,7 @@ import android.view.View;
  * Created by MS on 2018/9/11.
  */
 
-public class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity{
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -27,5 +27,31 @@ public class BaseActivity extends AppCompatActivity{
         }
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+        initView();
+        initData();
+        setData();
+        setListener();
     }
+
+    /**
+     * 初始化控件
+     */
+    protected abstract void initView();
+
+    /**
+     * 初始化数据
+     */
+    protected void initData() {}
+
+    /**
+     * 设置数据
+     */
+    protected void setData() {}
+
+    /**
+     * 设置监听
+     */
+    protected abstract void setListener();
+
 }
