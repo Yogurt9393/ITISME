@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
-import com.zp.itisme.utils.SPUtils;
 
 import java.lang.ref.WeakReference;
 
