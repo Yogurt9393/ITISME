@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.zp.itisme.activity.AddNewActivity">
 
     <View
@@ -26,7 +25,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Cancel"
+            android:text="CANCEL"
             android:textColor="@color/white" />
 
         <TextView
@@ -43,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:padding="10dp"
-            android:text="SURE"
+            android:text="SEND"
             android:textColor="@color/white" />
 
     </RelativeLayout>
@@ -51,24 +50,62 @@
     <EditText
         android:id="@+id/et_detail"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tl_top"
         android:layout_margin="10dp"
         android:background="@drawable/et_bg"
         android:gravity="start"
         android:hint="It's me ..."
-        android:padding="10dp" />
+        android:minHeight="120dp"
+        android:padding="10dp"
+        android:textCursorDrawable="@null" />
 
-    <View
-        android:id="@+id/view_bottom"
+    <RelativeLayout
+        android:id="@+id/rl_iv_add"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/et_detail"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <ImageView
+            android:id="@+id/iv_add_close"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorTheme"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/close" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorTheme" />
+        android:background="@color/colorTheme"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/add_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:src="@mipmap/pic" />
+
+    </RelativeLayout>
 
     <com.zp.itisme.view.KeyboardLayout
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
