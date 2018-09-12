@@ -14,9 +14,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_below="@id/view_top"
         android:background="@color/colorTheme">
+
+        <ImageView
+            android:id="@+id/iv_person"
+            android:padding="12dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/account" />
 
         <TextView
             android:layout_width="wrap_content"

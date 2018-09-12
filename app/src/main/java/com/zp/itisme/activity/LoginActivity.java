@@ -70,7 +70,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e("toLogin", "onSuccess:" + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
