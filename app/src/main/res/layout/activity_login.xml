@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.zp.itisme.activity.LoginActivity">
 
 
@@ -28,5 +29,32 @@
 
     </RelativeLayout>
 
+    <EditText
+        android:id="@+id/et_username"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/et_bg"
+        android:paddingLeft="10dp" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/et_bg"
+        android:paddingLeft="10dp" />
+
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/tv_button_bg"
+        android:gravity="center"
+        android:text="LOGIN"
+        android:textStyle="bold" />
+
+</LinearLayout>

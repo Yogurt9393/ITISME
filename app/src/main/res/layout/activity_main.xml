@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.zp.itisme.activity.MainActivity">
 
-
     <View
         android:id="@+id/view_top"
         android:layout_width="match_parent"
@@ -27,6 +26,5 @@
             android:textStyle="bold" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

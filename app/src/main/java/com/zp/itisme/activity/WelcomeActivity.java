@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.utils.SPUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -72,11 +73,14 @@ public class WelcomeActivity extends AppCompatActivity {
         myHandler.sendEmptyMessageDelayed(HANDLER_CODE, 1000);
         tv_tonext = (TextView) findViewById(R.id.tv_tonext);
         tv_tonext.setText(time + getString(R.string.tip_tonext));
+
+        isFirst = SPUtils.get(WelcomeActivity.this, "isFirst", true);
+        isLogin = SPUtils.get(WelcomeActivity.this, "isLogin", false);
+
+        SPUtils.put(WelcomeActivity.this, "isFirst", false);
     }
 
     private void toNext() {
-        isFirst = SPUtils.get(WelcomeActivity.this, "isFirst", true);
-        isLogin = SPUtils.get(WelcomeActivity.this, "isLogin", false);
         Intent intent = null;
         if (isFirst) {
             intent = new Intent(WelcomeActivity.this, RegisterActivity.class);

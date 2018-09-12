@@ -22,4 +22,5 @@ public class MainActivity extends BaseActivity {
     protected void setListener() {
 
     }
+
 }

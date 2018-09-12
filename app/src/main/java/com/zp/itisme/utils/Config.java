@@ -7,6 +7,7 @@ package com.zp.itisme.utils;
 public interface Config {
 
     String REGISTER_PATH = "http://api.android-zhangpei.cn/itisme/api/register.php";
+    String LOGIN_PATH = "http://api.android-zhangpei.cn/itisme/api/login.php";
 
 
 }
