@@ -14,17 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.zp.itisme.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
         </provider>
 
         <activity
@@ -46,9 +43,10 @@
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PersonSettingActivity"
+            android:name=".activity.PersonActivity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.AddNewActivity"></activity>
     </application>
 
 </manifest>

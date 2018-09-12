@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.zp.itisme.activity.PersonSettingActivity">
+    tools:context="com.zp.itisme.activity.AddNewActivity">
 
     <View
         android:id="@+id/view_top"
@@ -23,22 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="PERSONAL"
+            android:text="ADD"
             android:textStyle="bold" />
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-
-        <com.zp.itisme.view.CircleImageView
-            android:id="@+id/iv_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/account" />
-
-    </RelativeLayout>
 
 </LinearLayout>

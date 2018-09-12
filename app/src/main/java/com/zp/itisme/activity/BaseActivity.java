@@ -7,11 +7,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.zp.itisme.myapp.MyApp;
+
 /**
  * Created by MS on 2018/9/11.
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -32,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         initData();
         setData();
         setListener();
+        MyApp.addActivity(this);
     }
 
     /**
@@ -42,12 +45,14 @@ public abstract class BaseActivity extends AppCompatActivity{
     /**
      * 初始化数据
      */
-    protected void initData() {}
+    protected void initData() {
+    }
 
     /**
      * 设置数据
      */
-    protected void setData() {}
+    protected void setData() {
+    }
 
     /**
      * 设置监听

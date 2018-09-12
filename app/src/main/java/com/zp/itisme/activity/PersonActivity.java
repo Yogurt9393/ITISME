@@ -16,25 +16,35 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.utils.Config;
+import com.zp.itisme.utils.FileRead;
+import com.zp.itisme.utils.LoadImage;
+import com.zp.itisme.utils.SPUtils;
 import com.zp.itisme.utils.ToastUtils;
 import com.zp.itisme.view.CircleImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
-public class PersonSettingActivity extends BaseActivity implements View.OnClickListener {
+public class PersonActivity extends BaseActivity implements View.OnClickListener {
 
     private CircleImageView iv_icon;
     private View view_selectImage_popup;
@@ -44,21 +54,33 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
     private TextView tv_take;
     private TextView tv_cancel;
 
+    private ImageView iv_setting;
+
+    private String userid;
+    private String username;
+    private String icon_path;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person_setting);
+        setContentView(R.layout.activity_person);
     }
 
     @Override
     protected void initView() {
         iv_icon = (CircleImageView) findViewById(R.id.iv_icon);
+        iv_setting = (ImageView) findViewById(R.id.iv_setting);
+
+        userid = SPUtils.get(PersonActivity.this, "id", "");
+        username = SPUtils.get(PersonActivity.this, "username", "");
+        icon_path = SPUtils.get(PersonActivity.this, "icon_path", "");
+        LoadImage.set(PersonActivity.this, iv_icon, icon_path);
 
         setPopup();
     }
 
     private void setPopup() {
-        view_selectImage_popup = View.inflate(PersonSettingActivity.this, R.layout.view_popup_selectimage, null);
+        view_selectImage_popup = View.inflate(PersonActivity.this, R.layout.view_popup_selectimage, null);
 
         tv_pick = view_selectImage_popup.findViewById(R.id.tv_pick);
         tv_take = view_selectImage_popup.findViewById(R.id.tv_take);
@@ -91,6 +113,7 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void setListener() {
         iv_icon.setOnClickListener(this);
+        iv_setting.setOnClickListener(this);
     }
 
     @Override
@@ -111,6 +134,9 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_cancel:
                 selectImage_popup.dismiss();
                 break;
+            case R.id.iv_setting:
+                startActivity(new Intent(PersonActivity.this, SettingActivity.class));
+                break;
 
         }
     }
@@ -127,7 +153,7 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA};
-                ActivityCompat.requestPermissions(PersonSettingActivity.this, PERMISSIONS_CAMERA_AND_STORAGE, 0x001);
+                ActivityCompat.requestPermissions(PersonActivity.this, PERMISSIONS_CAMERA_AND_STORAGE, 0x001);
             } else {
                 openCamera();
             }
@@ -138,7 +164,6 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
 
     private void openCamera() {
         photoPath = Environment.getExternalStorageDirectory() + "/Image_" + System.currentTimeMillis() + ".jpg";
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri photoUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -162,7 +187,7 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA};
-                ActivityCompat.requestPermissions(PersonSettingActivity.this, PERMISSIONS_CAMERA_AND_STORAGE, 0x002);
+                ActivityCompat.requestPermissions(PersonActivity.this, PERMISSIONS_CAMERA_AND_STORAGE, 0x002);
             } else {
                 openAlbum();
             }
@@ -188,6 +213,7 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
             if (requestCode == 0x003) {
                 try {
                     FileInputStream fis = new FileInputStream(photoPath);
+                    uploadIcon(new File(photoPath));
                     Bitmap bitmap = BitmapFactory.decodeStream(fis);
                     iv_icon.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
@@ -199,12 +225,59 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
                 ContentResolver cr = this.getContentResolver();
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    photoPath = Environment.getExternalStorageDirectory() + "/Image_" + System.currentTimeMillis() + ".jpg";
+                    File file = new File(photoPath);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    uploadIcon(file);
                     iv_icon.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    private void uploadIcon(File photoFile) {
+        RequestParams params = new RequestParams(Config.UPLOADICON_PATH);
+        String str = new String(Base64.encode(FileRead.byByte(photoFile), Base64.NO_WRAP));
+        params.addBodyParameter("file", str);
+        params.addBodyParameter("filename", photoFile.getName());
+        params.addBodyParameter("userid", userid);
+        params.addBodyParameter("username", username);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int code = jsonObject.optInt("code");
+                    String msg = jsonObject.optString("msg");
+                    if (code == 0) {
+                        String icon_path = jsonObject.optString("data");
+                        SPUtils.put(PersonActivity.this, "icon_path", icon_path);
+                        listener.returnRefresh();
+                    }
+                    ToastUtils.show(PersonActivity.this, msg);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override
@@ -215,17 +288,28 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera();
                 } else {
-                    ToastUtils.show(PersonSettingActivity.this, "没有获得权限！");
+                    ToastUtils.show(PersonActivity.this, "没有获得权限！");
                 }
                 break;
             case 0x002:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImage();
                 } else {
-                    ToastUtils.show(PersonSettingActivity.this, "没有获得权限！");
+                    ToastUtils.show(PersonActivity.this, "没有获得权限！");
                 }
                 break;
         }
+    }
+
+    //刷新数据
+    private static refreshIconListener listener;
+
+    public interface refreshIconListener {
+        void returnRefresh();
+    }
+
+    public static void setOnIconRefreshListener(refreshIconListener myListener) {
+        listener = myListener;
     }
 
 }

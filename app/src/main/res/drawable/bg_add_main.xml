@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res-auto"
+    xmlns:Android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <size
+                android:height="30dp"
+                android:width="50dp"/>
+            <solid android:color="@color/colorTheme"/>
+        </shape>
+    </item>
+    <item Android:drawable="@drawable/add"
+        Android:width="50dp"
+        Android:height="30dp"/>
+</layer-list>

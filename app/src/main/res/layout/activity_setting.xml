@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.zp.itisme.activity.LoginActivity">
+    tools:context="com.zp.itisme.activity.SettingActivity">
 
     <View
         android:id="@+id/view_top"
@@ -28,32 +28,15 @@
 
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/et_username"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_margin="20dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/et_bg"
-        android:paddingLeft="10dp" />
-
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_margin="20dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/et_bg"
-        android:paddingLeft="10dp" />
-
     <TextView
-        android:id="@+id/tv_login"
+
+        android:id="@+id/tv_logout"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/tv_button_bg"
+        android:background="@color/colorTheme"
         android:gravity="center"
-        android:text="LOGIN"
+        android:text="LOGOUT"
         android:textStyle="bold" />
 
 </LinearLayout>
