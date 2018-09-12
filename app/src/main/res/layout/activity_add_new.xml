@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
     tools:context="com.zp.itisme.activity.AddNewActivity">
 
     <View
@@ -14,10 +14,20 @@
         android:background="@color/colorTheme" />
 
     <RelativeLayout
+        android:id="@+id/tl_top"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/view_top"
         android:background="@color/colorTheme">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Cancel"
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,7 +36,33 @@
             android:text="ADD"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="SURE"
+            android:textColor="@color/white" />
+
     </RelativeLayout>
 
+    <EditText
+        android:id="@+id/et_detail"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/tl_top"
+        android:layout_margin="10dp"
+        android:background="@drawable/et_bg"
+        android:gravity="start"
+        android:hint="It's me ..."
+        android:padding="10dp" />
 
-</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorTheme" />
+
+</RelativeLayout>
