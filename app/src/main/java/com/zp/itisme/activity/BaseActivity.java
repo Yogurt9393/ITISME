@@ -15,6 +15,8 @@ import com.zp.itisme.myapp.MyApp;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    public String TAG;
+
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
@@ -29,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
+        TAG = getLocalClassName();
         initView();
         initData();
         setData();

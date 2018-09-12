@@ -60,9 +60,15 @@
         android:padding="10dp" />
 
     <View
+        android:id="@+id/view_bottom"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorTheme" />
+
+    <com.zp.itisme.view.KeyboardLayout
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

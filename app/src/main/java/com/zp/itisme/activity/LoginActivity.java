@@ -2,6 +2,7 @@ package com.zp.itisme.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -73,35 +74,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     int code = jsonObject.optInt("code");
                     if (code == 0) {
                         JSONObject json = jsonObject.optJSONObject("data");
-
                         String id = json.optString("id");
                         SPUtils.put(LoginActivity.this, "id", id);
-
                         String username = json.optString("username");
                         SPUtils.put(LoginActivity.this, "username", username);
-
                         String nickname = json.optString("nickname");
                         SPUtils.put(LoginActivity.this, "nickname", nickname);
-
                         String sex = json.optString("sex");
                         SPUtils.put(LoginActivity.this, "sex", sex);
-
                         String age = json.optString("age");
                         SPUtils.put(LoginActivity.this, "age", age);
-
                         String register_time = json.optString("register_time");
                         SPUtils.put(LoginActivity.this, "register_time", register_time);
-
                         String lasttime_login = json.optString("lasttime_login");
                         SPUtils.put(LoginActivity.this, "lasttime_login", lasttime_login);
-
                         String icon_path = json.optString("icon_path");
                         SPUtils.put(LoginActivity.this, "icon_path", icon_path);
-
                         String sign = json.optString("sign");
                         SPUtils.put(LoginActivity.this, "sign", sign);
-
-                        SPUtils.put(LoginActivity.this,"isLogin",true);
+                        SPUtils.put(LoginActivity.this, "isLogin", true);
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         LoginActivity.this.finish();
                     }
