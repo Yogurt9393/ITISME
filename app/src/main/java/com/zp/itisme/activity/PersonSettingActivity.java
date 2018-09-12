@@ -70,10 +70,10 @@ public class PersonSettingActivity extends BaseActivity implements View.OnClickL
 
         selectImage_popup = new PopupWindow(view_selectImage_popup, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         selectImage_popup.setBackgroundDrawable(new ColorDrawable());
-        selectImage_popup.setOutsideTouchable(false);//设置点击外部的时候，窗口也可以消失
+        selectImage_popup.setOutsideTouchable(false);
         selectImage_popup.setAnimationStyle(R.style.popwin_anim_style);
-        selectImage_popup.setFocusable(true);//设置焦点
-        selectImage_popup.setTouchable(true);//设置是否可以触摸
+        selectImage_popup.setFocusable(false);
+        selectImage_popup.setTouchable(true);
         selectImage_popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
