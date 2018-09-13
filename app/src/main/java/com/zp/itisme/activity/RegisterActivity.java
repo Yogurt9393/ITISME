@@ -1,5 +1,6 @@
 package com.zp.itisme.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.dialog.LoadingDialog;
 import com.zp.itisme.utils.Config;
 import com.zp.itisme.utils.SPUtils;
 import com.zp.itisme.utils.ToastUtils;
@@ -23,6 +25,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText et_username;
     private EditText et_password;
     private TextView tv_register;
+
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void toRegister() {
+        loadingDialog = LoadingDialog.create(this);
+        loadingDialog.show();
         RequestParams params = new RequestParams(Config.REGISTER_PATH);
         params.addBodyParameter("username", et_username.getText().toString());
         params.addBodyParameter("password", et_password.getText().toString());
@@ -70,6 +76,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                if (loadingDialog.isShowing()){
+                    loadingDialog.dismiss();
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
@@ -84,11 +93,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                if (loadingDialog.isShowing()){
+                    loadingDialog.dismiss();
+                }
             }
 
             @Override
@@ -111,7 +123,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e("toLogin", "onSuccess:" + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");

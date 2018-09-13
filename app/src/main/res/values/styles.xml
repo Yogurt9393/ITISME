@@ -7,6 +7,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <!-- 下载数据的时候 加载的dialog样式 -->
+    <style name="dialog_tyle">
+        <item name="android:windowBackground">@drawable/load_data_shape</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
     <!-- 加载Popuwindow的dialog样式 -->
     <style name="popwin_anim_style">
         <item name="android:windowEnterAnimation">@anim/menu_show</item>

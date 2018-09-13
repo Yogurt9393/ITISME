@@ -9,7 +9,7 @@
     <RadioGroup
         android:id="@+id/rg_main"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -21,7 +21,7 @@
             android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
-            android:text="First" />
+            android:text="MAIN" />
 
         <RadioButton
             android:id="@+id/rb_second"
@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
-            android:text="Second" />
+            android:text="ACCOUNT" />
 
     </RadioGroup>
 
@@ -50,14 +50,13 @@
         android:layout_above="@id/view_main"
         android:orientation="vertical" />
 
-
     <TextView
         android:id="@+id/tv_add"
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
+        android:layout_margin="7dp"
         android:background="@drawable/bg_add_main"
         android:button="@null"
         android:gravity="center" />

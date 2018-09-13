@@ -1,5 +1,6 @@
 package com.zp.itisme.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.dialog.LoadingDialog;
 import com.zp.itisme.utils.Config;
 import com.zp.itisme.utils.SPUtils;
 
@@ -22,6 +24,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText et_username;
     private EditText et_password;
     private TextView tv_login;
+
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void toLogin() {
+        loadingDialog = LoadingDialog.create(this);
+        loadingDialog.show();
         RequestParams params = new RequestParams(Config.LOGIN_PATH);
         params.addBodyParameter("username", et_username.getText().toString());
         params.addBodyParameter("password", et_password.getText().toString());
@@ -69,6 +75,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                if (loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
@@ -103,7 +112,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                if (loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
             }
 
             @Override

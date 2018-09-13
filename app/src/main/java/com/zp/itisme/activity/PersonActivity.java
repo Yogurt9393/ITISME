@@ -1,6 +1,7 @@
 package com.zp.itisme.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +28,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.dialog.LoadingDialog;
+import com.zp.itisme.utils.CompressImage;
 import com.zp.itisme.utils.Config;
 import com.zp.itisme.utils.FileRead;
 import com.zp.itisme.utils.LoadImage;
@@ -54,11 +58,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     private TextView tv_take;
     private TextView tv_cancel;
 
-    private ImageView iv_setting;
-
     private String userid;
     private String username;
     private String icon_path;
+
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,6 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void initView() {
         iv_icon = (CircleImageView) findViewById(R.id.iv_icon);
-        iv_setting = (ImageView) findViewById(R.id.iv_setting);
 
         userid = SPUtils.get(PersonActivity.this, "id", "");
         username = SPUtils.get(PersonActivity.this, "username", "");
@@ -113,7 +116,6 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void setListener() {
         iv_icon.setOnClickListener(this);
-        iv_setting.setOnClickListener(this);
     }
 
     @Override
@@ -133,9 +135,6 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_cancel:
                 selectImage_popup.dismiss();
-                break;
-            case R.id.iv_setting:
-                startActivity(new Intent(PersonActivity.this, SettingActivity.class));
                 break;
 
         }
@@ -213,9 +212,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             if (requestCode == 0x003) {
                 try {
                     FileInputStream fis = new FileInputStream(photoPath);
-                    uploadIcon(new File(photoPath));
-                    Bitmap bitmap = BitmapFactory.decodeStream(fis);
+                    Bitmap bitmap = CompressImage.compressScale(BitmapFactory.decodeStream(fis));
                     iv_icon.setImageBitmap(bitmap);
+                    FileOutputStream fos = new FileOutputStream(photoPath);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 30, fos);
+                    uploadIcon(new File(photoPath));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -224,11 +225,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                 Uri uri = data.getData();
                 ContentResolver cr = this.getContentResolver();
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    Bitmap bitmap = CompressImage.compressScale(BitmapFactory.decodeStream(cr.openInputStream(uri)));
                     photoPath = Environment.getExternalStorageDirectory() + "/Image_" + System.currentTimeMillis() + ".jpg";
                     File file = new File(photoPath);
                     FileOutputStream fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 30, fos);
                     uploadIcon(file);
                     iv_icon.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
@@ -239,6 +240,8 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void uploadIcon(File photoFile) {
+        loadingDialog = LoadingDialog.create(this);
+        loadingDialog.show();
         RequestParams params = new RequestParams(Config.UPLOADICON_PATH);
         String str = new String(Base64.encode(FileRead.byByte(photoFile), Base64.NO_WRAP));
         params.addBodyParameter("file", str);
@@ -248,6 +251,9 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                if (loadingDialog.isShowing()){
+                    loadingDialog.dismiss();
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
@@ -265,7 +271,9 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                if (loadingDialog.isShowing()){
+                    loadingDialog.dismiss();
+                }
             }
 
             @Override

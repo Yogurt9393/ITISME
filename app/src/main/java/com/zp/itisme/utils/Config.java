@@ -7,6 +7,7 @@ public interface Config {
     String UPLOADICON_PATH = "http://api.android-zhangpei.cn/itisme/api/uploadicon.php";
     String UPLOADIMAGE_PATH = "http://api.android-zhangpei.cn/itisme/api/uploadimage.php";
     String ADDSHARE_PATH = "http://api.android-zhangpei.cn/itisme/api/addshare.php";
+    String SHARELIST_PATH = "http://api.android-zhangpei.cn/itisme/api/getsharelist.php";
 
 
 }

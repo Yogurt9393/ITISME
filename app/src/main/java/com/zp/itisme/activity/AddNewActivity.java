@@ -1,6 +1,7 @@
 package com.zp.itisme.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +26,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.dialog.LoadingDialog;
+import com.zp.itisme.utils.CompressImage;
 import com.zp.itisme.utils.Config;
+import com.zp.itisme.utils.FileRead;
 import com.zp.itisme.utils.SPUtils;
 import com.zp.itisme.utils.ToastUtils;
 import com.zp.itisme.view.KeyboardLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -54,6 +62,8 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
     private String userid;
     private String username;
     private String icon_path;
+
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,23 +168,42 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void toSubmit() {
+        loadingDialog = LoadingDialog.create(this);
+        loadingDialog.show();
         RequestParams params = new RequestParams(Config.ADDSHARE_PATH);
         params.addBodyParameter("userid", userid);
         params.addBodyParameter("user_icon", icon_path);
         params.addBodyParameter("username", username);
-        params.addBodyParameter("filename", "");
-        params.addBodyParameter("pic", "");
+        if (!TextUtils.isEmpty(photoPath)) {
+            params.addBodyParameter("filename", photoPath.substring(photoPath.lastIndexOf("/"), photoPath.length()));
+            String str = new String(Base64.encode(FileRead.byByte(new File(photoPath)), Base64.NO_WRAP));
+            params.addBodyParameter("pic", str);
+        }
         params.addBodyParameter("time", System.currentTimeMillis() + "");
         params.addBodyParameter("detail", et_detail.getText().toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e("AddNewActivity","onSuccess:"+result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int code = jsonObject.optInt("code");
+                    if (loadingDialog.isShowing()) {
+                        loadingDialog.dismiss();
+                    }
+                    if (code == 0) {
+                        AddNewActivity.this.finish();
+                        listener.returnRefresh();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                if (loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
             }
 
             @Override
@@ -202,11 +231,11 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
                 Uri uri = data.getData();
                 ContentResolver cr = this.getContentResolver();
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    Bitmap bitmap = CompressImage.compressScale(BitmapFactory.decodeStream(cr.openInputStream(uri)));
                     photoPath = Environment.getExternalStorageDirectory() + "/Image_" + System.currentTimeMillis() + ".jpg";
                     File file = new File(photoPath);
                     FileOutputStream fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 30, fos);
                     iv_add.setImageBitmap(bitmap);
                     rl_iv_add.setVisibility(View.VISIBLE);
                 } catch (FileNotFoundException e) {
@@ -229,6 +258,17 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
         }
+    }
+
+    //刷新数据
+    private static refreshDataListener listener;
+
+    public interface refreshDataListener {
+        void returnRefresh();
+    }
+
+    public static void setOnDataRefreshListener(refreshDataListener myListener) {
+        listener = myListener;
     }
 
 

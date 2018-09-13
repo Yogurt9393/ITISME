@@ -12,8 +12,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
-import com.zp.itisme.fragment.FirstFragment;
-import com.zp.itisme.fragment.SecondFragment;
+import com.zp.itisme.fragment.MainFragment;
+import com.zp.itisme.fragment.AccountFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +47,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         list_rb.add((RadioButton) rg_main.getChildAt(0));
         list_rb.add((RadioButton) rg_main.getChildAt(1));
 
-        FirstFragment firstFragment = new FirstFragment();
-        SecondFragment secondFragment = new SecondFragment();
+        MainFragment mainFragment = new MainFragment();
+        AccountFragment accountFragment = new AccountFragment();
 
-        list_fragment.add(firstFragment);
-        list_fragment.add(secondFragment);
+        list_fragment.add(mainFragment);
+        list_fragment.add(accountFragment);
         list_rb.get(0).setChecked(true);
         mTransaction = mManager.beginTransaction();
         mTransaction.add(R.id.ll_main, list_fragment.get(0));
