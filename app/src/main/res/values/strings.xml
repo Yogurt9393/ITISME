@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ITISME</string>
+    <string name="app_name">It’s ME</string>
 
     <string name="tip_tonext"> S后跳过</string>
     <string name="str_toast_reg_failed">注册失败，稍候重试！</string>

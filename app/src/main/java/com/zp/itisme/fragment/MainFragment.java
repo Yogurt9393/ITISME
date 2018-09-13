@@ -3,6 +3,7 @@ package com.zp.itisme.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class MainFragment extends BaseFragment implements XListView.IXListViewLi
 
     @Override
     protected void setListener() {
-        xlistview.setPullLoadEnable(false);
+        xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
         AddNewActivity.setOnDataRefreshListener(new AddNewActivity.refreshDataListener() {
@@ -82,10 +83,16 @@ public class MainFragment extends BaseFragment implements XListView.IXListViewLi
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                if (page == 1) {
+                    mData.clear();
+                }
                 String str_data = SPUtils.get(getContext(), username + "str_share_data", "");
                 if (!result.equals(str_data)) {
-                    SPUtils.put(getContext(), username + "str_share_data", result);
                     dealData(result);
+                    if (page == 1) {
+                        SPUtils.put(getContext(), username + "str_share_data", result);
+                    }
+
                 }
                 xlistview.stopLoadMore();
                 xlistview.stopRefresh();
@@ -115,9 +122,6 @@ public class MainFragment extends BaseFragment implements XListView.IXListViewLi
             int code = jsonObject.optInt("code");
             if (code == 0) {
                 JSONArray jsonArray = jsonObject.optJSONArray("data");
-                if (page == 1) {
-                    mData.clear();
-                }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject json = jsonArray.optJSONObject(i);
                     ShareBean share = new ShareBean();

@@ -178,18 +178,23 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
             params.addBodyParameter("filename", photoPath.substring(photoPath.lastIndexOf("/"), photoPath.length()));
             String str = new String(Base64.encode(FileRead.byByte(new File(photoPath)), Base64.NO_WRAP));
             params.addBodyParameter("pic", str);
+        }else{
+            params.addBodyParameter("filename","");
+            params.addBodyParameter("pic", "");
         }
         params.addBodyParameter("time", System.currentTimeMillis() + "");
         params.addBodyParameter("detail", et_detail.getText().toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.e("onSuccess","onSuccess:"+result);
+                if (loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
-                    if (loadingDialog.isShowing()) {
-                        loadingDialog.dismiss();
-                    }
+
                     if (code == 0) {
                         AddNewActivity.this.finish();
                         listener.returnRefresh();

@@ -9,5 +9,7 @@ public interface Config {
     String ADDSHARE_PATH = "http://api.android-zhangpei.cn/itisme/api/addshare.php";
     String SHARELIST_PATH = "http://api.android-zhangpei.cn/itisme/api/getsharelist.php";
 
+    String CREATETABLE_PATH = "http://api.android-zhangpei.cn/itisme/api/createtable.php";
+
 
 }

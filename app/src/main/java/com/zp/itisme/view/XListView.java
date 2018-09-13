@@ -290,6 +290,8 @@ public class XListView extends ListView implements OnScrollListener {
                     resetFooterHeight();
                 }
                 break;
+            default:
+                break;
         }
         return super.onTouchEvent(ev);
     }

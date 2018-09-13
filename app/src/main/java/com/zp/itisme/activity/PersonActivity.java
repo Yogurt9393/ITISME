@@ -251,7 +251,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if (loadingDialog.isShowing()){
+                if (loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
                 }
                 try {
@@ -271,7 +271,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (loadingDialog.isShowing()){
+                if (loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
                 }
             }
