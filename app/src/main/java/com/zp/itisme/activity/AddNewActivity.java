@@ -119,7 +119,9 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
                 toCancel();
                 break;
             case R.id.tv_sure:
-                toSubmit();
+                if (canSubmit()) {
+                    toSubmit();
+                }
                 break;
             case R.id.add_pic:
                 addPic();
@@ -129,6 +131,13 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
                 break;
 
         }
+    }
+
+    private boolean canSubmit() {
+        if (et_detail.getText().length() > 0) {
+            return true;
+        }
+        return false;
     }
 
     private void clesrImage() {
@@ -178,8 +187,8 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
             params.addBodyParameter("filename", photoPath.substring(photoPath.lastIndexOf("/"), photoPath.length()));
             String str = new String(Base64.encode(FileRead.byByte(new File(photoPath)), Base64.NO_WRAP));
             params.addBodyParameter("pic", str);
-        }else{
-            params.addBodyParameter("filename","");
+        } else {
+            params.addBodyParameter("filename", "");
             params.addBodyParameter("pic", "");
         }
         params.addBodyParameter("time", System.currentTimeMillis() + "");
@@ -187,14 +196,13 @@ public class AddNewActivity extends BaseActivity implements View.OnClickListener
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e("onSuccess","onSuccess:"+result);
+                Log.e("onSuccess", "onSuccess:" + result);
                 if (loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
                 }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int code = jsonObject.optInt("code");
-
                     if (code == 0) {
                         AddNewActivity.this.finish();
                         listener.returnRefresh();

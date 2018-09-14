@@ -63,10 +63,13 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
             tv_nickname.setText("No NickName");
         }
 
+        MenuBean menuBean1 = new MenuBean();
+        menuBean1.setName("AboutUs");
+        mData.add(menuBean1);
+
         MenuBean menuBean = new MenuBean();
         menuBean.setName("Setting");
         mData.add(menuBean);
-
         mAdapter.notifyDataSetChanged();
 
     }

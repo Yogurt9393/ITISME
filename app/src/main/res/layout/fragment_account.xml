@@ -26,7 +26,6 @@
 
     </RelativeLayout>
 
-
     <com.zp.itisme.view.XListView
         android:id="@+id/xlistview"
         android:layout_width="match_parent"

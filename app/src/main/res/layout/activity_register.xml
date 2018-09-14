@@ -44,6 +44,7 @@
         android:layout_margin="20dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/et_bg"
+        android:inputType="textPassword"
         android:paddingLeft="10dp" />
 
     <TextView
@@ -55,5 +56,12 @@
         android:gravity="center"
         android:text="REGISTER"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_tologin"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="TO LOGIN" />
 
 </LinearLayout>

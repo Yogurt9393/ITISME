@@ -12,6 +12,7 @@ import com.zp.itisme.R;
 import com.zp.itisme.dialog.LoadingDialog;
 import com.zp.itisme.utils.Config;
 import com.zp.itisme.utils.SPUtils;
+import com.zp.itisme.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private Dialog loadingDialog;
 
+    private TextView tv_toregister;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +41,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         et_username = (EditText) findViewById(R.id.et_username);
         et_password = (EditText) findViewById(R.id.et_password);
         tv_login = (TextView) findViewById(R.id.tv_login);
+        tv_toregister = (TextView) findViewById(R.id.tv_toregister);
     }
 
     @Override
     protected void setListener() {
         tv_login.setOnClickListener(this);
+        tv_toregister.setOnClickListener(this);
     }
 
     @Override
@@ -52,6 +57,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (canToNext()) {
                     toLogin();
                 }
+                break;
+            case R.id.tv_toregister:
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                LoginActivity.this.finish();
                 break;
         }
     }
@@ -104,6 +113,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         SPUtils.put(LoginActivity.this, "isLogin", true);
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         LoginActivity.this.finish();
+                    }else{
+                        ToastUtils.show(LoginActivity.this,"账号或密码错误，请重试...");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

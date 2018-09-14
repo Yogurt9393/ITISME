@@ -1,12 +1,15 @@
 package com.zp.itisme.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.zp.itisme.R;
+import com.zp.itisme.activity.AboutUsActivity;
+import com.zp.itisme.activity.SettingActivity;
 import com.zp.itisme.bean.MenuBean;
 
 import java.util.List;
@@ -51,8 +54,20 @@ public class AccountXListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        MenuBean menuBean = mData.get(position);
+        final MenuBean menuBean = mData.get(position);
         holder.tv_name.setText(menuBean.getName());
+        holder.tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (menuBean.getName().equals("Setting")) {
+                    mContext.startActivity(new Intent(mContext, SettingActivity.class));
+                }
+                if (menuBean.getName().equals("AboutUs")) {
+                    mContext.startActivity(new Intent(mContext, AboutUsActivity.class));
+                }
+
+            }
+        });
         return convertView;
     }
 

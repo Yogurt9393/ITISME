@@ -28,6 +28,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private Dialog loadingDialog;
 
+    private TextView tv_tologin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +41,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         et_username = (EditText) findViewById(R.id.et_username);
         et_password = (EditText) findViewById(R.id.et_password);
         tv_register = (TextView) findViewById(R.id.tv_register);
+        tv_tologin = (TextView) findViewById(R.id.tv_tologin);
     }
 
     @Override
     protected void setListener() {
         tv_register.setOnClickListener(this);
+        tv_tologin.setOnClickListener(this);
     }
 
     @Override
@@ -53,6 +57,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (canToNext()) {
                     toRegister();
                 }
+                break;
+            case R.id.tv_tologin:
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                RegisterActivity.this.finish();
                 break;
         }
     }
@@ -76,7 +84,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if (loadingDialog.isShowing()){
+                if (loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
                 }
                 try {
@@ -98,7 +106,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (loadingDialog.isShowing()){
+                if (loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
                 }
             }

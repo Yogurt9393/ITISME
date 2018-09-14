@@ -18,10 +18,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -41,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.io.File;
@@ -58,9 +60,19 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     private TextView tv_take;
     private TextView tv_cancel;
 
+    private TextView tv_name;
+    private Dialog changeNickname_dialog;
+    private View view_changenickname_dialog;
+    private EditText et_change_nickname;
+    private TextView tv_changenickname_sure;
+    private TextView tv_changenickname_cancel;
+
     private String userid;
     private String username;
     private String icon_path;
+    private String nickname;
+
+    private String change_nickname;
 
     private Dialog loadingDialog;
 
@@ -73,12 +85,15 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void initView() {
         iv_icon = (CircleImageView) findViewById(R.id.iv_icon);
+        tv_name = (TextView) findViewById(R.id.tv_name);
 
         userid = SPUtils.get(PersonActivity.this, "id", "");
         username = SPUtils.get(PersonActivity.this, "username", "");
         icon_path = SPUtils.get(PersonActivity.this, "icon_path", "");
+        nickname = SPUtils.get(PersonActivity.this, "nickname", "");
         LoadImage.set(PersonActivity.this, iv_icon, icon_path);
 
+        tv_name.setText(nickname);
         setPopup();
     }
 
@@ -116,6 +131,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void setListener() {
         iv_icon.setOnClickListener(this);
+        tv_name.setOnClickListener(this);
     }
 
     @Override
@@ -136,8 +152,91 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_cancel:
                 selectImage_popup.dismiss();
                 break;
+            case R.id.tv_name:
+                changeNickname();
+                break;
+            case R.id.tv_changenickname_sure:
+                if (canSubmitNickname()) {
+                    toChangeNickName();
+                }
+                if (changeNickname_dialog.isShowing()) {
+                    changeNickname_dialog.dismiss();
+                }
+                break;
+            case R.id.tv_changenickname_cancel:
+                if (changeNickname_dialog.isShowing()) {
+                    changeNickname_dialog.dismiss();
+                }
+                break;
 
         }
+    }
+
+    private boolean canSubmitNickname() {
+        if (et_change_nickname.getText().length() > 0 && et_change_nickname.getText().length() < 12) {
+            if (!et_change_nickname.getText().toString().equals(nickname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void toChangeNickName() {
+        change_nickname = et_change_nickname.getText().toString();
+        RequestParams params = new RequestParams(Config.CHANGENICKNAME_PATH);
+        params.addBodyParameter("userid", userid);
+        params.addBodyParameter("nickname", change_nickname);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int code = jsonObject.optInt("code");
+                    String msg = jsonObject.optString("msg");
+                    if (code == 0) {
+                        ToastUtils.show(PersonActivity.this, msg);
+                        tv_name.setText(change_nickname);
+                        SPUtils.put(PersonActivity.this, "nickname", change_nickname);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void changeNickname() {
+        changeNickname_dialog = new Dialog(PersonActivity.this, R.style.dialog_tyle);
+        changeNickname_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        changeNickname_dialog.setCancelable(false);
+        view_changenickname_dialog = View.inflate(PersonActivity.this, R.layout.view_popup_changenickname, null);
+
+        et_change_nickname = view_changenickname_dialog.findViewById(R.id.et_change_nickname);
+        tv_changenickname_sure = view_changenickname_dialog.findViewById(R.id.tv_changenickname_sure);
+        tv_changenickname_cancel = view_changenickname_dialog.findViewById(R.id.tv_changenickname_cancel);
+
+        tv_changenickname_sure.setOnClickListener(this);
+        tv_changenickname_cancel.setOnClickListener(this);
+
+        changeNickname_dialog.setContentView(view_changenickname_dialog);
+        changeNickname_dialog.show();
     }
 
     private void takePhoto() {

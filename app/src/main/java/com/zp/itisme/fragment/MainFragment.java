@@ -85,13 +85,13 @@ public class MainFragment extends BaseFragment implements XListView.IXListViewLi
             public void onSuccess(String result) {
                 if (page == 1) {
                     mData.clear();
-                }
-                String str_data = SPUtils.get(getContext(), username + "str_share_data", "");
-                if (!result.equals(str_data)) {
-                    dealData(result);
-                    if (page == 1) {
+                    String str_data = SPUtils.get(getContext(), username + "str_share_data", "");
+                    if (!result.equals(str_data)) {
                         SPUtils.put(getContext(), username + "str_share_data", result);
                     }
+                    dealData(result);
+                }else{
+                    dealData(result);
                 }
                 xlistview.stopLoadMore();
                 xlistview.stopRefresh();
