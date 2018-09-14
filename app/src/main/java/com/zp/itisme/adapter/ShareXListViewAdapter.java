@@ -73,22 +73,23 @@ public class ShareXListViewAdapter extends BaseAdapter {
 
         String addTime = shareBean.getTime();
         String nowTime = System.currentTimeMillis() + "";
-        if ((TimeUtils.getD(nowTime) - TimeUtils.getD(addTime)) == 0) {//当天
-            if ((TimeUtils.getH(nowTime) - TimeUtils.getH(addTime)) == 0) {//这个小时
-                if ((TimeUtils.getm(nowTime) - TimeUtils.getm(addTime)) < 2) {//两分钟内
-                    holder.tv_time.setText("just now");
+        if (!TextUtils.isEmpty(addTime) && !TextUtils.isEmpty(nowTime)) {
+            if ((TimeUtils.getD(nowTime) - TimeUtils.getD(addTime)) == 0) {//当天
+                if ((TimeUtils.getH(nowTime) - TimeUtils.getH(addTime)) == 0) {//这个小时
+                    if ((TimeUtils.getm(nowTime) - TimeUtils.getm(addTime)) < 2) {//两分钟内
+                        holder.tv_time.setText("just now");
+                    } else {
+                        holder.tv_time.setText((TimeUtils.getm(nowTime) - TimeUtils.getm(addTime)) + " mins ago");
+                    }
                 } else {
-                    holder.tv_time.setText((TimeUtils.getm(nowTime) - TimeUtils.getm(addTime)) + " mins ago");
+                    holder.tv_time.setText(TimeUtils.getH(nowTime) - TimeUtils.getH(addTime) + " hours ago");
                 }
-            } else {
-                holder.tv_time.setText(TimeUtils.getH(nowTime) - TimeUtils.getH(addTime) + " hours ago");
+            } else if ((TimeUtils.getD(nowTime) - TimeUtils.getD(addTime)) == 1) {//昨天
+                holder.tv_time.setText("Yesterday " + TimeUtils.setHHmm(shareBean.getTime()));
+            } else {//时间很久了
+                holder.tv_time.setText(TimeUtils.setMMddHHmm(shareBean.getTime()));
             }
-        } else if ((TimeUtils.getD(nowTime) - TimeUtils.getD(addTime)) == 1) {//昨天
-            holder.tv_time.setText(TimeUtils.setHHmm("Yesterday " + shareBean.getTime()));
-        } else {//时间很久了
-            holder.tv_time.setText(TimeUtils.setMMddHHmm(shareBean.getTime()));
         }
-
         return convertView;
     }
 

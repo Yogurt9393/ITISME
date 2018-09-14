@@ -92,7 +92,6 @@ public class MainFragment extends BaseFragment implements XListView.IXListViewLi
                     if (page == 1) {
                         SPUtils.put(getContext(), username + "str_share_data", result);
                     }
-
                 }
                 xlistview.stopLoadMore();
                 xlistview.stopRefresh();
