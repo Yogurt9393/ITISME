@@ -1,9 +1,5 @@
 package com.zp.itisme.bean;
 
-/**
- * Created by MS on 2018/9/13.
- */
-
 public class MenuBean {
 
     String name;

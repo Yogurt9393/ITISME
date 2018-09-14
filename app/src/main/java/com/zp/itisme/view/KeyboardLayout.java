@@ -8,10 +8,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-/**
- * Created by MS on 2018/9/12.
- */
-
 public class KeyboardLayout extends FrameLayout {
 
     private KeyboardLayoutListener mListener;

@@ -14,10 +14,6 @@ import com.zp.itisme.bean.MenuBean;
 
 import java.util.List;
 
-/**
- * Created by MS on 2018/9/13.
- */
-
 public class AccountXListViewAdapter extends BaseAdapter {
 
     private Context mContext;

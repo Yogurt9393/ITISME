@@ -3,10 +3,6 @@ package com.zp.itisme.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by MS on 2018/9/13.
- */
-
 public class TimeUtils {
 
 

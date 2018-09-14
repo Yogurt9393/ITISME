@@ -2,7 +2,6 @@ package com.zp.itisme.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.zp.itisme.R;
 import com.zp.itisme.bean.ShareBean;
 import com.zp.itisme.utils.LoadImage;
-import com.zp.itisme.utils.LoadItemImage;
 import com.zp.itisme.utils.TimeUtils;
 import com.zp.itisme.view.CircleImageView;
 

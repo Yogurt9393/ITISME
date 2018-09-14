@@ -3,14 +3,6 @@ package com.zp.itisme.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by Android Stidio.
- *
- * @author ZP
- * @email try.zp.catch@gmail.com
- * @date 2017/8/15
- */
-
 public class SPUtils {
 
     public static void put(Context context,String name,String str){

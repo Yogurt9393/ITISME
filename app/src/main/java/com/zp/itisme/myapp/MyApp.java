@@ -17,7 +17,6 @@ public class MyApp extends Application{
         super.onCreate();
         x.Ext.init(this);
         activityList = new ArrayList<Activity>();
-
     }
 
     // 添加Activity到容器中

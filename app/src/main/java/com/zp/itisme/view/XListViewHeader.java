@@ -14,11 +14,6 @@ import android.widget.TextView;
 
 import com.zp.itisme.R;
 
-
-/**
- * Created by ZP on 2017/7/14.
- */
-
 public class XListViewHeader extends LinearLayout {
     private LinearLayout mContainer;
 //    private ImageView mArrowImageView;

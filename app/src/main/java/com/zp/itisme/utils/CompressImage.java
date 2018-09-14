@@ -7,10 +7,6 @@ import android.util.Log;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-/**
- * Created by MS on 2018/9/13.
- */
-
 public class CompressImage {
 
     public static Bitmap compressScale(Bitmap image) {

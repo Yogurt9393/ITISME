@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-
 public class LoadImage {
 
     public static void set(Context context, ImageView imageView, String icon_path) {
